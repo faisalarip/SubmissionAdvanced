@@ -1,0 +1,6 @@
+framework module Pods_MySubmissionAdvanced {
+  umbrella header "Pods-MySubmissionAdvanced-umbrella.h"
+
+  export *
+  module * { export * }
+}

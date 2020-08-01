@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19F101" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Games" representedClassName=".Games" syncable="YES" codeGenerationType="class">
+        <attribute name="gameAbout" optional="YES" attributeType="String"/>
+        <attribute name="gameClips" optional="YES" attributeType="String"/>
+        <attribute name="gameFamiliarNames" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String]"/>
+        <attribute name="gameGenre" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String]"/>
+        <attribute name="gameId" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="gameImage" optional="YES" attributeType="String"/>
+        <attribute name="gameName" optional="YES" attributeType="String"/>
+        <attribute name="gamePlatform" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[String]"/>
+        <attribute name="gameRating" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="gameRatingCount" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="gameRelease" optional="YES" attributeType="String"/>
+        <attribute name="gameSelected" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="gameWebsiteUrl" optional="YES" attributeType="String"/>
+    </entity>
+    <elements>
+        <element name="Games" positionX="-63" positionY="-18" width="128" height="238"/>
+    </elements>
+</model>
