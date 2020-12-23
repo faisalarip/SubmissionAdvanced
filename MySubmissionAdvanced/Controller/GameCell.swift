@@ -20,7 +20,7 @@ class GameCell: UITableViewCell {
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var ratingVotes: UILabel!
-    @IBOutlet weak var favoriteButton: UIButton!
+    @IBOutlet weak var votesLabel: UILabel!
     @IBOutlet weak var starsView: CosmosView!
     
     override func awakeFromNib() {
@@ -33,8 +33,4 @@ class GameCell: UITableViewCell {
         
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        favoriteButton.isSelected = false
-    }
 }

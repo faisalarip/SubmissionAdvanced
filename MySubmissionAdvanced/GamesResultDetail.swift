@@ -18,6 +18,7 @@ struct GamesResultDetail: Codable {
     var clipDetail: Clips?
     let website: String
     let rating: Double
+    let ratingCount: Int
     var gamePlatform: [Platform]? // results[0].platforms[0].platform.name
     let genres: [Genre]
     
@@ -27,6 +28,7 @@ struct GamesResultDetail: Codable {
         case clipDetail = "clip"
         case gamePlatform = "platforms"
         case alternativeName = "alternative_names"
+        case ratingCount = "ratings_count"
     }
     
     init(from decoder: Decoder) throws {
@@ -41,6 +43,7 @@ struct GamesResultDetail: Codable {
         website = try container.decodeIfPresent(String.self, forKey: .website) ?? ""
         released = try container.decodeIfPresent(String.self, forKey: .released) ?? ""
         rating = try container.decodeIfPresent(Double.self, forKey: .rating) ?? 0
+        ratingCount = try container.decodeIfPresent(Int.self, forKey: .ratingCount) ?? 0
         gamePlatform = try container.decodeIfPresent([Platform].self, forKey: .gamePlatform)
         genres = try container.decode([Genre].self, forKey: .genres)        
         

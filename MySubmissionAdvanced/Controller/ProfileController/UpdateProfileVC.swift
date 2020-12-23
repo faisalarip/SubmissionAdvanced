@@ -21,10 +21,13 @@ class UpdateProfileVC: UIViewController {
     @IBOutlet weak var cancelButtonOutlet: RoundedButton!
     @IBOutlet weak var resetButtonOutlet: RoundedButton!
     
+    private var newPngData = Data()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "EditAccount"
-        uiButton()
+        
+        updateUI()
         
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapPhoto))
         gesture.numberOfTapsRequired = 1
@@ -34,16 +37,23 @@ class UpdateProfileVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        ProfileModel.synchronize()
-        if let photo = ProfileModel.photo {
-            photoProfileUpdate.image = UIImage(data: photo)
+        
+        if ProfileModel.stateLogin == false {
+            print("statelogin")
+        } else {
+            ProfileModel.synchronize()
+            if let photo = ProfileModel.photo {
+                photoProfileUpdate.image = UIImage(data: photo)
+            }
+            usernameUpdateField.text = ProfileModel.name
+            professionUpdateField.text = ProfileModel.profession
+            aboutUpdateTextView.text = ProfileModel.about
+            emailUpdateField.text = ProfileModel.email
+            githubUpdateField.text = ProfileModel.githubUrl
+            linkedinUpdateField.text = ProfileModel.linkedinUrl
+            
         }
-        usernameUpdateField.text = ProfileModel.name
-        professionUpdateField.text = ProfileModel.profession
-        aboutUpdateTextView.text = ProfileModel.about
-        emailUpdateField.text = ProfileModel.email
-        githubUpdateField.text = ProfileModel.githubUrl
-        linkedinUpdateField.text = ProfileModel.linkedinUrl
+        
     }
     
     @objc private func didTapPhoto() {
@@ -62,8 +72,8 @@ class UpdateProfileVC: UIViewController {
             let linked = linkedinUpdateField.text
         {
             
-            if photo.imageAsset == nil{
-                textEmpty("Photo profile")
+            if pngData != newPngData {
+                photoAlert("Image photo")
             } else if name.isEmpty{
                 textEmpty("Name")
             } else if email.isEmpty {
@@ -77,7 +87,7 @@ class UpdateProfileVC: UIViewController {
             } else if linked.isEmpty {
                 textEmpty("LinkedId")
             } else {
-                saveProfile(name, pngData, email, profession, about, github, linked)
+                saveProfile(name, newPngData, email, profession, about, github, linked)
                 
                 self.navigationController?.dismiss(animated: true, completion: nil)
             }
@@ -92,10 +102,9 @@ class UpdateProfileVC: UIViewController {
     
     @IBAction func resetButtonAction(_ sender: Any) {
         if ProfileModel.deleteAll() {
-            self.navigationController?.dismiss(animated: false, completion: nil)
             let nav = UINavigationController(rootViewController: CreateAccountVC())
             nav.modalPresentationStyle = .fullScreen
-            present(nav, animated: true)
+            self.present(nav, animated: true)
         }
     }
     
@@ -123,7 +132,16 @@ class UpdateProfileVC: UIViewController {
         self.present(alert, animated: true)
     }
     
-    private func uiButton() {
+    private func photoAlert(_ field: String) {
+        let alert = UIAlertController(title: "Oppss.. your \(field) hasn't changed", message: "Are you sure to keep the previous photo?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+            guard let pngPhoto = self.photoProfileUpdate.image?.pngData() else { return }
+            self.newPngData = pngPhoto
+        }))
+        self.present(alert, animated: true)
+    }
+    
+    private func updateUI() {
         usernameUpdateField.autocorrectionType = .no
         professionUpdateField.autocorrectionType = .no
         aboutUpdateTextView.autocorrectionType = .no
@@ -132,6 +150,10 @@ class UpdateProfileVC: UIViewController {
         linkedinUpdateField.autocorrectionType = .no
         
         updateButtonOutlet.greenColorForButton()
+        aboutUpdateTextView.layer.cornerRadius = aboutUpdateTextView.frame.height * 0.042
+        aboutUpdateTextView.layer.borderWidth = 1
+        aboutUpdateTextView.layer.borderColor = UIColor.systemGray5.cgColor
+        
         cancelButtonOutlet.borderColor = UIColor(red: 46/255, green: 204/255, blue: 113/255, alpha: 1)
         cancelButtonOutlet.setTitleColor(UIColor(red: 46/255, green: 204/255, blue: 113/255, alpha: 1), for: .normal)
         resetButtonOutlet.borderColor = UIColor(red: 231/255, green: 76/255, blue: 60/255, alpha: 1)
@@ -174,7 +196,8 @@ extension UpdateProfileVC: UIImagePickerControllerDelegate, UINavigationControll
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
-        guard let selectedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else { return }
+        guard let selectedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage, let pngData = selectedImage.pngData() else { return }
+        newPngData = pngData
         photoProfileUpdate.image = selectedImage
     }
     
@@ -182,3 +205,4 @@ extension UpdateProfileVC: UIImagePickerControllerDelegate, UINavigationControll
         picker.dismiss(animated: true, completion: nil)
     }
 }
+

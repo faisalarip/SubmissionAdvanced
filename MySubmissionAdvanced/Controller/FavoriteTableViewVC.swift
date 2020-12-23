@@ -15,6 +15,7 @@ class FavoriteTableViewVC: UIViewController, UITableViewDelegate, UITableViewDat
     
     private let spinner = JGProgressHUD(style: .dark)
     
+    
     var gamesModelFav = [GamesModel]()
     var gamesVC = GamesVC()
     private lazy var gamesProvider: GamesProvider = {
@@ -24,6 +25,17 @@ class FavoriteTableViewVC: UIViewController, UITableViewDelegate, UITableViewDat
     private var player: AVPlayer!
     private var playerVC: AVPlayerViewController!
     
+    private let ImageNotFound: UIImageView = {
+        let image = UIImageView()
+        image.image = UIImage(named: "no_result")
+        image.translatesAutoresizingMaskIntoConstraints = false
+        image.contentMode = .scaleAspectFit
+        image.layer.masksToBounds = true
+        image.clipsToBounds = true
+        image.isHidden = true
+        return image
+    }()
+    
     @IBOutlet var viewFav: UIView!
     @IBOutlet weak var tableViewFav: UITableView!
     
@@ -31,6 +43,15 @@ class FavoriteTableViewVC: UIViewController, UITableViewDelegate, UITableViewDat
         super.viewDidLoad()
         configureTableView()
         configureNavigationItem()
+        
+        view.addSubview(ImageNotFound)
+        NSLayoutConstraint.activate([
+            ImageNotFound.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            ImageNotFound.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            ImageNotFound.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
+            ImageNotFound.widthAnchor.constraint(equalToConstant: 200),
+            ImageNotFound.heightAnchor.constraint(equalToConstant: 200)
+        ])
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -42,16 +63,16 @@ class FavoriteTableViewVC: UIViewController, UITableViewDelegate, UITableViewDat
         self.gamesProvider.getAllGames { (result) in
             DispatchQueue.main.async {
                 if result.isEmpty {
+                    self.ImageNotFound.isHidden = false
+                    self.tableViewFav.isHidden = true
                     let alert = UIAlertController(title: "Oppss, Your favorite doesn't exist", message: "Go to the games lists and add games anything you like to favorite", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
-                        
-                        guard let gamesVC = self.storyboard?.instantiateViewController(withIdentifier: "GamesVC") as? GamesVC else { return }
-                        self.navigationController?.pushViewController(gamesVC, animated: true)
-                        
-                    }))
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                     self.present(alert, animated: true)
                 } else {
+                    self.ImageNotFound.isHidden = true
+                    self.tableViewFav.isHidden = false
                     self.gamesModelFav = result
+                    
                     self.tableViewFav.reloadData()
                 }
                 
@@ -66,7 +87,7 @@ class FavoriteTableViewVC: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     private func configureNavigationItem() {
-        let editingItem = UIBarButtonItem(title: tableViewFav.isEditing ? "Done" : "Edit", style: .done, target: self, action: #selector(self.toggleEditing))
+        let editingItem = UIBarButtonItem(title: tableViewFav.isEditing ? "Done" : "Delete", style: .done, target: self, action: #selector(self.toggleEditing))
         navigationItem.rightBarButtonItems = [editingItem]
     }
     
@@ -81,74 +102,72 @@ class FavoriteTableViewVC: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell", for: indexPath) as! GameCell
         
-        let games = gamesModelFav[indexPath.row]
-        
-        if let bgImage = games.backgroundImage, let urlString = URL(string: bgImage), let defaultImage = bgImage.first?.description {
-            if games.backgroundImage == "", let urlFirstImage = URL(string: defaultImage) {
-                URLSession.shared.dataTask(with: urlFirstImage) { (data, _, _) in
-                    guard let safeData = data else { return }
-                    DispatchQueue.main.async {
-                        cell.gameImage.image = UIImage(data: safeData)
-                    }
-                }
-            } else {
-                URLSession.shared.dataTask(with: urlString) { (data, _, _) in
-                    guard let safeData = data else { return }
-                    DispatchQueue.main.async {
-                        cell.gameImage.image = UIImage(data: safeData)
-                    }
-                }.resume()
-            }
-        }
-        
-        /// UITableview (View cell) Setup        
-        if let name = games.name,
-            let date = games.dateRealese,
-            let genre = games.genres,
-            let rating = games.rating,
-            let platform = games.platforms,
-            let ratingCount = games.ratingsCount,
-            let clip = games.clip
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "GameCell", for: indexPath) as? GameCell {
             
-        {
-            cell.gameName.text = name
-            cell.dateLabel.text = date
-            cell.platformLabel.numberOfLines = platform.count
-            cell.platformLabel.text = platform.joined(separator: ", ")
-            cell.genreLabel.numberOfLines = genre.count
-            cell.genreLabel.text = genre.joined(separator: ", ")
-            cell.ratingVotes.text = String(ratingCount)
-            cell.ratingLabel.text = String(rating)
-            cell.starsView.rating = rating
+            let games = gamesModelFav[indexPath.row]
             
-            /// Configuring cache video
-            VideoCacheManager.shared.getFileWith(stringUrl: clip) { (result) in
-                switch result {
-                    case .success(let url):
-                        self.player = AVPlayer(url: url)
-                        break;
-                    case .failure(let error):
-                        print(error, "failure error in the cache of video")
-                        break;
+            if let bgImage = games.backgroundImage, let urlString = URL(string: bgImage), let defaultImage = bgImage.first?.description {
+                if games.backgroundImage == "", let urlFirstImage = URL(string: defaultImage) {
+                    URLSession.shared.dataTask(with: urlFirstImage) { (data, _, _) in
+                        guard let safeData = data else { return }
+                        DispatchQueue.main.async {
+                            cell.gameImage.image = UIImage(data: safeData)
+                        }
+                    }
+                } else {
+                    URLSession.shared.dataTask(with: urlString) { (data, _, _) in
+                        guard let safeData = data else { return }
+                        DispatchQueue.main.async {
+                            cell.gameImage.image = UIImage(data: safeData)
+                        }
+                    }.resume()
                 }
             }
+            
+            // UITableview (View cell) Setup
+            if let name = games.name,
+                let date = games.dateRealese,
+                let genre = games.genres,
+                let rating = games.rating,
+                let platform = games.platforms,
+                let ratingCount = games.ratingsCount,
+                let clip = games.clip {
+                
+                cell.gameName.text = name
+                cell.dateLabel.text = date
+                cell.platformLabel.numberOfLines = platform.count
+                cell.platformLabel.text = platform.joined(separator: ", ")
+                cell.genreLabel.numberOfLines = genre.count
+                cell.genreLabel.text = genre.joined(separator: ", ")
+                cell.ratingVotes.text = String(ratingCount)
+                cell.ratingLabel.text = String(rating)
+                cell.starsView.rating = rating
+                
+                // Configuring cache video
+                VideoCacheManager.shared.getFileWith(stringUrl: clip) { (result) in
+                    switch result {
+                        case .success(let url):
+                            self.player = AVPlayer(url: url)
+                            break;
+                        case .failure(let error):
+                            print(error, "failure error in the cache of video")
+                            break;
+                    }
+                }
+            }
+            
+            // Video Player Configure
+            playerVC = AVPlayerViewController()
+            playerVC.player = player
+            playerVC.view.frame = cell.videoView.bounds
+            addChild(playerVC)
+            playerVC.player?.pause()
+            cell.videoView.addSubview(playerVC.view)
+            
+            return cell
         }
-        
-        /// Video Player Configure
-        playerVC = AVPlayerViewController()
-        playerVC.player = player
-        playerVC.view.frame = cell.videoView.bounds
-        addChild(playerVC)        
-        playerVC.player?.play()
-        playerVC.player?.isMuted = true
-        playerVC.didMove(toParent: self)
-        cell.videoView.addSubview(playerVC.view)
-        
-        cell.favoriteButton.isHidden = true
-        
-        return cell
+        return UITableViewCell()
     }
     
     // MARK: - TableView Delegate
@@ -168,13 +187,15 @@ class FavoriteTableViewVC: UIViewController, UITableViewDelegate, UITableViewDat
         if editingStyle == .delete, let gameId = gamesModelFav[indexPath.row].id, let gameName = gamesModelFav[indexPath.row].name {
             
             let alert = UIAlertController(title: "Confirm", message: "You want to delete \(gameName) from favorite?", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in
+                self.gamesModelFav.remove(at: indexPath.row)
+                self.tableViewFav.deleteRows(at: [indexPath], with: .automatic)
                 self.gamesProvider.deleteGamesById(gameId) {
                     DispatchQueue.main.async {
+                        self.loadGames()
                         let alert = UIAlertController(title: "Successful", message: "Your favorite games has been deleted", preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in                                                        
+                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in
                             self.spinner.show(in: self.view)
-                            self.loadGames()
                             self.navigationController?.popViewController(animated: true)
                             self.spinner.dismiss()
                         }))
@@ -183,7 +204,7 @@ class FavoriteTableViewVC: UIViewController, UITableViewDelegate, UITableViewDat
                 }
                 
             }))
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (_) in
                 self.navigationController?.popViewController(animated: true)
             }))
             

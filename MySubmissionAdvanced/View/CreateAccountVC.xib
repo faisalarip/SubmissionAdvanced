@@ -49,7 +49,7 @@
                                         <constraint firstAttribute="height" constant="42" id="ITq-XO-0JO"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <textInputTraits key="textInputTraits"/>
+                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                 </textField>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Profession" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LOZ-K5-d8s">
                                     <rect key="frame" x="40" y="297" width="340" height="21"/>
@@ -69,7 +69,7 @@
                                         <constraint firstAttribute="height" constant="42" id="a0n-2r-QXf"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <textInputTraits key="textInputTraits"/>
+                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                 </textField>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gR7-tv-iT1">
                                     <rect key="frame" x="40" y="613" width="88" height="21"/>
@@ -83,7 +83,7 @@
                                         <constraint firstAttribute="height" constant="42" id="b2x-eG-uks"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <textInputTraits key="textInputTraits"/>
+                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                 </textField>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Github" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="85j-M6-O1m">
                                     <rect key="frame" x="40" y="712" width="340" height="21"/>
@@ -97,9 +97,9 @@
                                         <constraint firstAttribute="height" constant="42" id="72m-4H-ee3"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <textInputTraits key="textInputTraits"/>
+                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                 </textField>
-                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Type something about you.." textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="QFO-nZ-nfr">
+                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="QFO-nZ-nfr">
                                     <rect key="frame" x="28" y="429" width="352" height="160"/>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                     <constraints>
@@ -107,14 +107,15 @@
                                     </constraints>
                                     <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no"/>
                                 </textView>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3J4-aF-y5V" customClass="RoundedButton" customModule="MySubmissionAdvanced" customModuleProvider="target">
-                                    <rect key="frame" x="126" y="924" width="156" height="42"/>
+                                    <rect key="frame" x="28" y="924" width="352" height="48"/>
                                     <constraints>
-                                        <constraint firstAttribute="height" constant="42" id="KbI-TZ-in2"/>
+                                        <constraint firstAttribute="height" constant="48" id="KbI-TZ-in2"/>
                                     </constraints>
-                                    <state key="normal" title="Create"/>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                    <state key="normal" title="Create Account"/>
                                     <userDefinedRuntimeAttributes>
                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                             <real key="value" value="8"/>
@@ -139,7 +140,7 @@
                                         <constraint firstAttribute="height" constant="42" id="z85-Dg-WcT"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <textInputTraits key="textInputTraits"/>
+                                    <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                 </textField>
                             </subviews>
                             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -154,7 +155,7 @@
                                 <constraint firstAttribute="trailing" secondItem="l1W-Go-fPF" secondAttribute="trailing" constant="34" id="8Ed-Td-0rZ"/>
                                 <constraint firstAttribute="trailing" secondItem="VHq-Z4-Dfb" secondAttribute="trailing" constant="286" id="8Zm-6k-1iB"/>
                                 <constraint firstAttribute="trailing" secondItem="8jX-xo-b73" secondAttribute="trailing" constant="121" id="Bt4-43-8Jh"/>
-                                <constraint firstItem="3J4-aF-y5V" firstAttribute="leading" secondItem="iIb-Zy-9GQ" secondAttribute="leading" constant="126" id="CvU-7d-cYh"/>
+                                <constraint firstItem="3J4-aF-y5V" firstAttribute="leading" secondItem="iIb-Zy-9GQ" secondAttribute="leading" constant="28" id="CvU-7d-cYh"/>
                                 <constraint firstItem="QFO-nZ-nfr" firstAttribute="leading" secondItem="iIb-Zy-9GQ" secondAttribute="leading" constant="28" id="Dsq-Ph-03N"/>
                                 <constraint firstItem="KFx-Bj-rzm" firstAttribute="top" secondItem="Ju8-aQ-8jC" secondAttribute="bottom" constant="24" id="FZE-nK-ya6"/>
                                 <constraint firstAttribute="trailing" secondItem="85j-M6-O1m" secondAttribute="trailing" constant="34" id="Mvv-Wc-kxS"/>
@@ -185,7 +186,7 @@
                                 <constraint firstItem="aSu-kf-fYb" firstAttribute="leading" secondItem="iIb-Zy-9GQ" secondAttribute="leading" constant="28" id="u95-wa-Eux"/>
                                 <constraint firstItem="8jX-xo-b73" firstAttribute="top" secondItem="iIb-Zy-9GQ" secondAttribute="top" constant="48" id="uPg-CG-KkH"/>
                                 <constraint firstAttribute="trailing" secondItem="IjR-Sq-POb" secondAttribute="trailing" constant="34" id="vom-fp-fQj"/>
-                                <constraint firstAttribute="trailing" secondItem="3J4-aF-y5V" secondAttribute="trailing" constant="132" id="wgA-PU-jKZ"/>
+                                <constraint firstAttribute="trailing" secondItem="3J4-aF-y5V" secondAttribute="trailing" constant="34" id="wgA-PU-jKZ"/>
                                 <constraint firstItem="LOZ-K5-d8s" firstAttribute="top" secondItem="aSu-kf-fYb" secondAttribute="bottom" constant="24" id="zEK-OM-6at"/>
                             </constraints>
                         </view>

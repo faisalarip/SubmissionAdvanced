@@ -139,8 +139,9 @@ struct GamesManager {
             let clip = decodeData.clipDetail?.clip
             let realese = decodeData.released
             let rating = decodeData.rating
+            let ratingCount = decodeData.ratingCount
             
-            let gameDataModel = GamesModel(id: Int32(id), selected: false, name: name, alternativeNames: alternativeNameList, description: description, dateRealese: realese, backgroundImage: bgImage, clip: clip ,websiteURL: website, rating: rating, ratingsCount: 0, platforms: platformsList, genres: genreList)
+            let gameDataModel = GamesModel(id: Int32(id), selected: false, name: name, alternativeNames: alternativeNameList, description: description, dateRealese: realese, backgroundImage: bgImage, clip: clip ,websiteURL: website, rating: rating, ratingsCount: Int64(ratingCount), platforms: platformsList, genres: genreList)
             
             gamesModel.append(gameDataModel)
             return gamesModel

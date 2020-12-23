@@ -20,19 +20,12 @@ class CreateAccountVC: UIViewController {
     @IBOutlet weak var linkedinProfile: UITextField!
     @IBOutlet weak var createButton: RoundedButton!
     
+    private var newPngImage = Data()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        usernameProfile.autocorrectionType = .no
-        emailProfile.autocorrectionType = .no
-        professionProfile.autocorrectionType = .no
-        githubProfile.autocorrectionType = .no
-        linkedinProfile.autocorrectionType = .no
-        aboutProfile.autocorrectionType = .no
-        view.autoresizingMask = .flexibleWidth
-        
         title = "Create New Account"
-        createButton.greenColorForButton()
+        updateUI()
         
         let gesture = UITapGestureRecognizer(target: self, action: #selector(self.didTapChangePhotoProfile))
         gesture.numberOfTapsRequired = 1
@@ -49,7 +42,7 @@ class CreateAccountVC: UIViewController {
             let github = githubProfile.text,
             let linkedin = linkedinProfile.text {
             
-            if photo.imageAsset == nil {
+            if pngData != newPngImage {                
                 textEmpty("Photo")
             } else if name.isEmpty{
                 textEmpty("Name")
@@ -94,10 +87,27 @@ class CreateAccountVC: UIViewController {
         ProfileModel.linkedinUrl = linkedinUrl
     }
     
-    func textEmpty(_ field: String) {
+    private func textEmpty(_ field: String) {
         let alert = UIAlertController(title: "Oppss.. \(field) is empty", message: "Please, enter all information to log in", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true)
+    }
+    
+    private func updateUI() {
+        usernameProfile.autocorrectionType = .no
+        emailProfile.autocorrectionType = .no
+        professionProfile.autocorrectionType = .no
+        githubProfile.autocorrectionType = .no
+        linkedinProfile.autocorrectionType = .no
+        aboutProfile.autocorrectionType = .no
+        
+        createButton.greenColorForButton()
+        aboutProfile.delegate = self
+        aboutProfile.layer.cornerRadius = aboutProfile.frame.height * 0.042
+        aboutProfile.layer.borderWidth = 1
+        aboutProfile.layer.borderColor = UIColor.systemGray5.cgColor
+        aboutProfile.text = "Type something about you.."
+        aboutProfile.textColor = UIColor.systemGray5
     }
 }
 
@@ -136,8 +146,10 @@ extension CreateAccountVC: UIImagePickerControllerDelegate, UINavigationControll
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true, completion: nil)
         
-        guard let selectedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else { return }
+        guard let selectedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage, let pngData = selectedImage.pngData() else { return }
+        newPngImage = pngData
         photoProfile.image = selectedImage
+        
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -145,3 +157,12 @@ extension CreateAccountVC: UIImagePickerControllerDelegate, UINavigationControll
     }
 }
 
+extension CreateAccountVC: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if aboutProfile.textColor == UIColor.systemGray5 {
+            aboutProfile.text = nil
+            aboutProfile.textColor = UIColor.label
+        }
+    }
+    
+}

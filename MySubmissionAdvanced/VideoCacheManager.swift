@@ -37,7 +37,7 @@ class VideoCacheManager {
             if let url = URL(string: stringUrl), let videoData = NSData(contentsOf: url) {
                 videoData.write(to: file, atomically: true)
                 DispatchQueue.main.async {
-                    let error = NSError(domain: "SomeErrorDomain", code: -2001 /* some error code */, userInfo: ["descrption": "Can't download video"])
+                    let error = NSError(domain: "SomeErrorDomain" , code: -2001 /* some error code */, userInfo: ["description": "Can't download video, maybe your connection not good"])
                     completionHandler(.failure(error))
                 }
             }
